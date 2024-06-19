@@ -15,9 +15,9 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY as string);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 const corsOptions = {
-	origin: '*', // Allow all origins. You can restrict this to specific domains.
-	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
-	allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+	origin: '*',
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
