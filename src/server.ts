@@ -1,10 +1,36 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import {
+	EnhancedGenerateContentResponse,
+	GoogleGenerativeAI,
+} from '@google/generative-ai';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware to parse JSON bodies
+const genAI = new GoogleGenerativeAI(process.env.API_KEY as string);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+const corsOptions = {
+	origin: '*', // Allow all origins. You can restrict this to specific domains.
+	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+	allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
+
+const testQuery = async (
+	prompt: string
+): Promise<EnhancedGenerateContentResponse> => {
+	const result = await model.generateContent(prompt);
+	const response = result.response;
+	return response;
+};
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {
